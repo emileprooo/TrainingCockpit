@@ -396,7 +396,7 @@ document.getElementById("chips").addEventListener("click",function(e){
   if(STATE.data) renderChart();
 });
 function load(){
-  fetch(API).then(function(r){return r.json();}).then(function(d){
+  fetch(API + "&t=" + Date.now(), {cache:"no-store"}).then(function(r){return r.json();}).then(function(d){
     STATE.data=d||{}; renderAll();
   }).catch(function(){
     document.getElementById("today").innerHTML='<div class="empty-note">Fout bij laden van de data-API.</div>';

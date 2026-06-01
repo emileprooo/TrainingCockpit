@@ -106,7 +106,7 @@ body{padding:22px 16px 64px;max-width:720px;margin:0 auto}
 
 <!-- HERO METRICS -->
 <div class="metrics" id="metrics">
-  <div class="metric"><div class="m-label">Fitness</div><div class="m-val empty">—</div><div class="m-meta">laden…</div></div>
+  <div class="metric"><div class="m-label">Fitness · CTL</div><div class="m-val empty">—</div><div class="m-meta">laden…</div></div>
   <div class="metric"><div class="m-label">Vorm · TSB</div><div class="m-val empty">—</div><div class="m-meta">laden…</div></div>
   <div class="metric"><div class="m-label">Recovery</div><div class="m-val empty">—</div><div class="m-meta">laden…</div></div>
 </div>
@@ -169,7 +169,7 @@ function renderMetrics(){
   var m = STATE.data.metrics || {};
   var box = document.getElementById("metrics");
   box.innerHTML = "";
-  box.appendChild(metricCard("Fitness · CTL", fmt(m.ctl,0), "", m.ctl!=null,
+  box.appendChild(metricCard("Fitness", fmt(m.ctl,0), "", m.ctl!=null,
     m.ramp_rate!=null ? ("ramp <b>"+fmt(m.ramp_rate,1)+"</b>") : (m.wellness_date?("op "+m.wellness_date.slice(5)):"geen data")));
   box.appendChild(metricCard("Vorm · TSB", (m.form!=null && m.form>0?"+":"")+fmt(m.form,0), "", m.form!=null,
     m.form!=null ? formState(m.form) : "geen data"));

@@ -239,6 +239,10 @@ function renderToday(){
   wraps.innerHTML="";
   var list = STATE.data.today_workouts || [];
   document.getElementById("today-date").textContent = dateLabel(STATE.data.today);
+  if(STATE.data.today_error){
+    wraps.appendChild(el("div","empty-note","Kon training niet laden (data-bron tijdelijk onbereikbaar). Probeer te verversen."));
+    return;
+  }
   if(!list.length){
     wraps.appendChild(el("div","empty-note","Geen geplande training vandaag. Rustdag of vrij in te vullen."));
     return;

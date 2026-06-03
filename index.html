@@ -201,8 +201,8 @@ body{padding:22px 16px 64px;max-width:720px;margin:0 auto}
     <div class="chart-wrap">
       <div class="chips" id="chips">
         <span class="chip" data-d="30">30d</span>
-        <span class="chip" data-d="90">90d</span>
-        <span class="chip on" data-d="180">180d</span>
+        <span class="chip on" data-d="90">90d</span>
+        <span class="chip" data-d="180">180d</span>
         <span class="chip" data-d="360">360d</span>
       </div>
       <svg class="chart-svg" id="chart" viewBox="0 0 700 170" preserveAspectRatio="none"></svg>
@@ -245,7 +245,7 @@ var ADAPT_WEBHOOK = "";
 // Vul in zodra de n8n-replan-workflow live is.
 var AVAIL_WEBHOOK = "";
 
-var STATE = { data: null, win: 180, avail: {}, availDates: [], nearTerm: 9, horizon: 30, replanPending: false, saveQueue: {}, saveTimer: null, saving: false };
+var STATE = { data: null, win: 90, avail: {}, availDates: [], nearTerm: 9, horizon: 30, replanPending: false, saveQueue: {}, saveTimer: null, saving: false };
 var DOW = ["zo","ma","di","wo","do","vr","za"];
 
 /* ---------- helpers ---------- */
@@ -449,13 +449,25 @@ function renderChart(){
   var n=series.length;
   function X(i){return padL + (i/(n-1))*(W-padL-padR);}
   function Y(v){return padT + (1-(v-lo)/(hi-lo))*(H-padT-padB);}
+  // Catmull-Rom-spline -> vloeiende cubische Bézier door alle punten
+  function smoothD(pts){
+    if(pts.length<2) return "";
+    if(pts.length===2) return "M"+pts[0].x.toFixed(1)+" "+pts[0].y.toFixed(1)+" L"+pts[1].x.toFixed(1)+" "+pts[1].y.toFixed(1);
+    var d="M"+pts[0].x.toFixed(1)+" "+pts[0].y.toFixed(1);
+    for(var i=0;i<pts.length-1;i++){
+      var p0=pts[i-1]||pts[i], p1=pts[i], p2=pts[i+1], p3=pts[i+2]||p2;
+      var c1x=p1.x+(p2.x-p0.x)/6, c1y=p1.y+(p2.y-p0.y)/6;
+      var c2x=p2.x-(p3.x-p1.x)/6, c2y=p2.y-(p3.y-p1.y)/6;
+      d+=" C"+c1x.toFixed(1)+" "+c1y.toFixed(1)+" "+c2x.toFixed(1)+" "+c2y.toFixed(1)+" "+p2.x.toFixed(1)+" "+p2.y.toFixed(1);
+    }
+    return d;
+  }
   function path(key,color,width,op){
-    var d="",started=false;
-    series.forEach(function(p,i){ var v=num(p[key],1); if(v==null)return;
-      d += (started?" L":"M")+X(i).toFixed(1)+" "+Y(v).toFixed(1); started=true; });
-    if(!d)return;
+    var pts=[];
+    series.forEach(function(p,i){ var v=num(p[key],1); if(v==null)return; pts.push({x:X(i),y:Y(v)}); });
+    if(pts.length<1)return;
     var e=document.createElementNS("http://www.w3.org/2000/svg","path");
-    e.setAttribute("d",d); e.setAttribute("fill","none"); e.setAttribute("stroke",color);
+    e.setAttribute("d",smoothD(pts)); e.setAttribute("fill","none"); e.setAttribute("stroke",color);
     e.setAttribute("stroke-width",width); e.setAttribute("stroke-linejoin","round"); e.setAttribute("stroke-linecap","round");
     if(op) e.setAttribute("opacity",op);
     svg.appendChild(e);

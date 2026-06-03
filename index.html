@@ -614,31 +614,54 @@ function renderConfirmBar(){
   var tab=document.querySelector('.tab[data-view="availability"]');
   if(tab) tab.classList.toggle("flag",show);
 }
+// Zorg dat alle hangende sliderwijzigingen eerst weggeschreven zijn,
+// zodat de confirm-clear (needs_replan=false) niet wordt overschreven.
+function flushNow(){
+  clearTimeout(STATE.saveTimer);
+  if(STATE.saving){ return new Promise(function(res){ setTimeout(function(){ flushNow().then(res); }, 250); }); }
+  var keys=Object.keys(STATE.saveQueue);
+  if(!keys.length) return Promise.resolve();
+  var snapshot=keys.map(function(d){ return {date:d, minutes:STATE.saveQueue[d]}; });
+  STATE.saveQueue={};
+  return fetch(API+"?save=1",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({changes:snapshot})})
+    .then(function(r){ return r.json().catch(function(){return {};}); })
+    .then(function(res){ if(!(res&&res.ok)) throw new Error("save failed"); });
+}
+
 document.getElementById("av-confirm-btn").addEventListener("click",function(){
   var btn=this;
+  btn.disabled=true; btn.textContent="Bezig…";
+  setSync("saving","bevestigen…");
   var nearChanges=STATE.availDates.slice(0,STATE.nearTerm+1)
     .filter(function(d){ return STATE.avail[d] && STATE.avail[d].needs_replan; })
     .map(function(d){ return {date:d, minutes:STATE.avail[d].minutes}; });
-  if(!AVAIL_WEBHOOK){
-    toast("n8n-webhook nog niet ingesteld (zie AVAIL_WEBHOOK)");
-    return;
-  }
-  btn.disabled=true; btn.textContent="Bezig…";
   var payload={ triggered_at:new Date().toISOString(), today:STATE.data.today, near_term_days:STATE.nearTerm+1, changes:nearChanges };
-  fetch(AVAIL_WEBHOOK,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)})
-    .then(function(r){
-      if(!r.ok) throw new Error("status "+r.status);
-      // clear needs_replan server-side
-      return fetch(API+"?confirm=1",{method:"POST",headers:{"Content-Type":"application/json"},body:"{}"});
+
+  // 1) hangende saves wegschrijven  2) (optioneel) n8n triggeren  3) vlaggen clearen
+  flushNow()
+    .then(function(){
+      if(!AVAIL_WEBHOOK) return null; // webhook nog niet gekoppeld -> alleen bevestigen
+      return fetch(AVAIL_WEBHOOK,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)})
+        .then(function(r){ if(!r.ok) throw new Error("webhook "+r.status); });
+    })
+    .then(function(){
+      return fetch(API+"?confirm=1",{method:"POST",headers:{"Content-Type":"application/json"},body:"{}"})
+        .then(function(r){ return r.json().catch(function(){return {};}); })
+        .then(function(res){ if(!(res&&res.ok)) throw new Error("confirm failed"); });
     })
     .then(function(){
       STATE.replanPending=false;
       STATE.availDates.forEach(function(d){ if(STATE.avail[d]) STATE.avail[d].needs_replan=false; });
       btn.disabled=false; btn.textContent="Confirm changes · adjust training";
       renderConfirmBar();
-      toast("Verstuurd naar n8n · training wordt aangepast");
+      setSync("saved","bevestigd");
+      toast(AVAIL_WEBHOOK ? "Verstuurd naar n8n · training wordt aangepast" : "Bevestigd · n8n nog niet gekoppeld");
     })
-    .catch(function(){ btn.disabled=false; btn.textContent="Confirm changes · adjust training"; toast("Fout bij versturen — probeer opnieuw"); });
+    .catch(function(){
+      btn.disabled=false; btn.textContent="Confirm changes · adjust training";
+      setSync("error","fout");
+      toast("Fout bij bevestigen — probeer opnieuw");
+    });
 });
 
 /* ---- alert on cockpit (next 7 days unfilled) ---- */

@@ -22,12 +22,26 @@
 }
 html,body{background:var(--bg);color:var(--fg);font-family:var(--human);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
 body{padding:22px 16px 64px;max-width:720px;margin:0 auto}
-.top{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--rule);padding-bottom:12px;margin-bottom:22px}
+.top{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--rule);padding-bottom:12px;margin-bottom:16px}
 .monolith{font-family:var(--mono);font-weight:800;letter-spacing:.4em;font-size:19px}
 .eyebrow{font-family:var(--mono);text-transform:uppercase;letter-spacing:.18em;font-size:10px;color:var(--fg3)}
 
+/* tab nav (segmented control) */
+.tabs{display:flex;gap:0;border:.5px solid var(--rule);margin-bottom:22px}
+.tab{flex:1;font-family:var(--mono);text-transform:uppercase;letter-spacing:.14em;font-size:11px;color:var(--fg3);background:transparent;border:none;border-right:.5px solid var(--rule);padding:11px 8px;cursor:pointer;position:relative}
+.tab:last-child{border-right:none}
+.tab.on{background:var(--accent);color:var(--accent-fg);font-weight:700}
+.tab .dot{display:none;width:6px;height:6px;background:var(--accent);position:absolute;top:6px;right:8px}
+.tab.on .dot{background:var(--accent-fg)}
+.tab.flag .dot{display:block}
+
+/* views */
+.view{display:none}
+.view.on{display:block}
+
 /* section headers */
 .cat{font-family:var(--mono);text-transform:uppercase;letter-spacing:.18em;font-size:11px;color:var(--accent);margin:26px 0 10px;border-bottom:.5px solid var(--rule);padding-bottom:6px;display:flex;justify-content:space-between;align-items:baseline}
+.cat:first-child{margin-top:0}
 .cat .sub{color:var(--fg4);letter-spacing:.08em}
 
 /* hero metric strip */
@@ -43,6 +57,14 @@ body{padding:22px 16px 64px;max-width:720px;margin:0 auto}
 /* panels */
 .panel{border:.5px solid var(--rule);background:var(--elev);padding:0;margin-bottom:2px}
 .empty-note{font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--fg4);padding:18px 16px}
+
+/* availability alert card (cockpit) */
+.alert{display:none;border:.5px solid var(--accent-deep);background:var(--sunken);padding:14px 16px;margin-bottom:18px;align-items:center;gap:14px}
+.alert.show{display:flex}
+.alert-body{flex:1;min-width:0}
+.alert-title{font-family:var(--mono);text-transform:uppercase;letter-spacing:.12em;font-size:10px;color:var(--accent);margin-bottom:4px}
+.alert-txt{font-size:13px;color:var(--fg2);line-height:1.45}
+.alert-cta{flex:none;font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em;font-size:11px;font-weight:700;color:var(--accent-fg);background:var(--accent);border:none;padding:11px 13px;cursor:pointer}
 
 /* workout card */
 .wk{border:.5px solid var(--rule);background:var(--elev);padding:16px;margin-bottom:10px}
@@ -94,8 +116,48 @@ body{padding:22px 16px 64px;max-width:720px;margin:0 auto}
 .up-type{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:var(--fg4)}
 .up-load{font-family:var(--mono);font-size:11px;color:var(--fg3);flex:none;text-align:right}
 
+/* ============ AVAILABILITY ============ */
+.av-intro{font-size:13px;color:var(--fg3);line-height:1.5;margin-bottom:6px}
+.av-sync{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--fg4);display:flex;align-items:center;gap:7px}
+.av-sync .ind{width:7px;height:7px;background:var(--fg4);flex:none}
+.av-sync.saving .ind{background:var(--accent)}
+.av-sync.saved .ind{background:var(--green)}
+.av-sync.error .ind{background:var(--accent-deep)}
+
+.av-list{margin-bottom:14px}
+.day{border:.5px solid var(--rule);border-top:none;background:var(--elev);padding:11px 14px 13px}
+.day:first-child{border-top:.5px solid var(--rule)}
+.day.today{border-left:2px solid var(--accent)}
+.day.weekend{background:var(--sunken)}
+.day-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:9px}
+.day-date{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--fg2)}
+.day.today .day-date{color:var(--accent)}
+.day-badge{font-family:var(--mono);font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-fg);background:var(--accent);padding:2px 5px;margin-left:7px}
+.day-val{font-family:var(--mono);font-weight:700;font-size:15px;letter-spacing:.02em;color:var(--fg)}
+.day-val.empty{color:var(--fg4);font-weight:500}
+
+/* range slider — PRO styled, cross-browser */
+.day-slider{-webkit-appearance:none;appearance:none;width:100%;height:26px;background:transparent;cursor:pointer;display:block;margin:0;touch-action:pan-y}
+.day-slider:focus{outline:none}
+/* track */
+.day-slider::-webkit-slider-runnable-track{height:3px;background:var(--rule);border:none}
+.day-slider::-moz-range-track{height:3px;background:var(--rule);border:none}
+.day-slider::-moz-range-progress{height:3px;background:var(--accent)}
+/* thumb */
+.day-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:16px;height:16px;background:var(--accent);border:2px solid var(--bg);margin-top:-7px;border-radius:0}
+.day-slider::-moz-range-thumb{width:16px;height:16px;background:var(--accent);border:2px solid var(--bg);border-radius:0}
+.day-slider.empty::-webkit-slider-thumb{background:var(--fg4)}
+.day-slider.empty::-moz-range-thumb{background:var(--fg4)}
+.day-scale{display:flex;justify-content:space-between;font-family:var(--mono);font-size:8px;letter-spacing:.04em;color:var(--fg4);margin-top:5px}
+
+/* confirm bar — sticky bottom of availability view */
+.av-confirm{position:sticky;bottom:10px;display:none;margin-top:18px;border:.5px solid var(--accent);background:var(--sunken);padding:12px}
+.av-confirm.show{display:block}
+.av-confirm .ct{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--fg3);margin-bottom:9px;text-align:center}
+.av-confirm .ct b{color:var(--fg);font-weight:600}
+
 .sigil{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--fg4);text-align:right;margin-top:26px;text-transform:uppercase}
-#toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:var(--fg);color:var(--bg);font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.1em;padding:11px 18px;opacity:0;transition:opacity .18s;pointer-events:none;max-width:90%;text-align:center}
+#toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:var(--fg);color:var(--bg);font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.1em;padding:11px 18px;opacity:0;transition:opacity .18s;pointer-events:none;max-width:90%;text-align:center;z-index:10}
 </style>
 </head>
 <body>
@@ -104,52 +166,86 @@ body{padding:22px 16px 64px;max-width:720px;margin:0 auto}
   <span class="eyebrow">Training · cockpit</span>
 </div>
 
-<!-- HERO METRICS -->
-<div class="metrics" id="metrics">
-  <div class="metric"><div class="m-label">Fitness · CTL</div><div class="m-val empty">—</div><div class="m-meta">laden…</div></div>
-  <div class="metric"><div class="m-label">Vorm · TSB</div><div class="m-val empty">—</div><div class="m-meta">laden…</div></div>
-  <div class="metric"><div class="m-label">Recovery</div><div class="m-val empty">—</div><div class="m-meta">laden…</div></div>
+<!-- TAB NAV -->
+<div class="tabs" id="tabs">
+  <button class="tab on" data-view="cockpit">Cockpit</button>
+  <button class="tab" data-view="availability">Beschikbaarheid<span class="dot"></span></button>
 </div>
 
-<!-- TODAY -->
-<div class="cat">Vandaag <span class="sub" id="today-date"></span></div>
-<div id="today"><div class="empty-note">Laden…</div></div>
+<!-- ============ VIEW: COCKPIT ============ -->
+<div class="view on" id="view-cockpit">
 
-<!-- CTL TREND -->
-<div class="cat">CTL-verloop <span class="sub" id="ctl-now"></span></div>
-<div class="panel">
-  <div class="chart-wrap">
-    <div class="chips" id="chips">
-      <span class="chip" data-d="30">30d</span>
-      <span class="chip" data-d="90">90d</span>
-      <span class="chip on" data-d="180">180d</span>
-      <span class="chip" data-d="360">360d</span>
+  <!-- AVAILABILITY ALERT (only when next-7 days unfilled) -->
+  <div class="alert" id="alert">
+    <div class="alert-body">
+      <div class="alert-title">Beschikbaarheid</div>
+      <div class="alert-txt" id="alert-txt"></div>
     </div>
-    <svg class="chart-svg" id="chart" viewBox="0 0 700 170" preserveAspectRatio="none"></svg>
-    <div class="chart-foot">
-      <span class="leg"><span class="ctl">CTL</span><span class="atl">ATL</span></span>
-      <span id="chart-range"></span>
+    <button class="alert-cta" id="alert-cta">Invullen →</button>
+  </div>
+
+  <!-- HERO METRICS -->
+  <div class="metrics" id="metrics">
+    <div class="metric"><div class="m-label">Fitness · CTL</div><div class="m-val empty">—</div><div class="m-meta">laden…</div></div>
+    <div class="metric"><div class="m-label">Vorm · TSB</div><div class="m-val empty">—</div><div class="m-meta">laden…</div></div>
+    <div class="metric"><div class="m-label">Recovery</div><div class="m-val empty">—</div><div class="m-meta">laden…</div></div>
+  </div>
+
+  <!-- TODAY -->
+  <div class="cat">Vandaag <span class="sub" id="today-date"></span></div>
+  <div id="today"><div class="empty-note">Laden…</div></div>
+
+  <!-- CTL TREND -->
+  <div class="cat">CTL-verloop <span class="sub" id="ctl-now"></span></div>
+  <div class="panel">
+    <div class="chart-wrap">
+      <div class="chips" id="chips">
+        <span class="chip" data-d="30">30d</span>
+        <span class="chip" data-d="90">90d</span>
+        <span class="chip on" data-d="180">180d</span>
+        <span class="chip" data-d="360">360d</span>
+      </div>
+      <svg class="chart-svg" id="chart" viewBox="0 0 700 170" preserveAspectRatio="none"></svg>
+      <div class="chart-foot">
+        <span class="leg"><span class="ctl">CTL</span><span class="atl">ATL</span></span>
+        <span id="chart-range"></span>
+      </div>
     </div>
+  </div>
+
+  <!-- UPCOMING -->
+  <div class="cat">Volgende trainingen <span class="sub">vanaf morgen</span></div>
+  <div id="upcoming"><div class="empty-note">Laden…</div></div>
+</div>
+
+<!-- ============ VIEW: AVAILABILITY ============ -->
+<div class="view" id="view-availability">
+  <div class="cat">Beschikbaarheid <span class="sub av-sync" id="av-sync"><span class="ind"></span><span id="av-sync-txt">—</span></span></div>
+  <div class="av-intro">Geef per dag aan hoeveel tijd je hebt om te trainen, tot een maand vooruit. Sleep links voorbij 0:00 om een dag op <b>niet ingevuld</b> te zetten.</div>
+  <div class="av-list" id="av-list"><div class="empty-note">Laden…</div></div>
+
+  <div class="av-confirm" id="av-confirm">
+    <div class="ct" id="av-confirm-ct"></div>
+    <button class="btn" id="av-confirm-btn">Confirm changes · adjust training</button>
   </div>
 </div>
 
-<!-- UPCOMING -->
-<div class="cat">Volgende trainingen <span class="sub">vanaf morgen</span></div>
-<div id="upcoming"><div class="empty-note">Laden…</div></div>
-
-<div class="sigil" id="sigil">v2026.1 · training-cockpit · proj-2026-003</div>
+<div class="sigil" id="sigil">v2026.2 · training-cockpit · proj-2026-003</div>
 <div id="toast"></div>
 
 <script>
 /* ============================================================
    CONFIG
    ============================================================ */
-var API = "https://meelkgmhexnkjyluhnvn.supabase.co/functions/v1/training?data=1";
+var API = "https://meelkgmhexnkjyluhnvn.supabase.co/functions/v1/training";
 // Adapt Training -> n8n webhook. Plak hier je n8n Production-webhook-URL.
-// Leeg = knop werkt nog niet (toont melding). Vul in zodra de n8n-workflow live is.
 var ADAPT_WEBHOOK = "";
+// Beschikbaarheid "Confirm changes / adjust training" -> n8n webhook.
+// Leeg = de knop slaat op maar triggert n8n nog niet (toont melding).
+// Vul in zodra de n8n-replan-workflow live is.
+var AVAIL_WEBHOOK = "";
 
-var STATE = { data: null, win: 180 };
+var STATE = { data: null, win: 180, avail: {}, availDates: [], nearTerm: 9, horizon: 30, replanPending: false, saveQueue: {}, saveTimer: null, saving: false };
 var DOW = ["zo","ma","di","wo","do","vr","za"];
 
 /* ---------- helpers ---------- */
@@ -161,6 +257,22 @@ function dateLabel(iso){ if(!iso)return ""; var d=new Date(iso+"T12:00:00"); ret
 function toast(m){ var t=document.getElementById("toast"); t.textContent=m; t.style.opacity="1"; clearTimeout(t._t); t._t=setTimeout(function(){t.style.opacity="0";},2600); }
 function formState(f){ if(f==null)return ""; if(f>5)return "fris"; if(f>-10)return "neutraal"; if(f>-30)return "vermoeid"; return "diep moe"; }
 function recoState(r){ if(r==null)return ""; if(r>=67)return "groen"; if(r>=34)return "geel"; return "rood"; }
+function addDaysJS(iso,n){ var d=new Date(iso+"T12:00:00"); d.setDate(d.getDate()+n); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+function minLabel(min){ if(min==null) return "—"; var h=Math.floor(min/60), m=min%60; return h+":"+String(m).padStart(2,"0"); }
+function isWeekend(iso){ var d=new Date(iso+"T12:00:00").getDay(); return d===0||d===6; }
+
+/* ============================================================
+   TAB NAV
+   ============================================================ */
+function switchView(name){
+  [].forEach.call(document.querySelectorAll(".tab"),function(t){t.classList.toggle("on",t.getAttribute("data-view")===name);});
+  document.getElementById("view-cockpit").classList.toggle("on",name==="cockpit");
+  document.getElementById("view-availability").classList.toggle("on",name==="availability");
+  window.scrollTo(0,0);
+}
+document.getElementById("tabs").addEventListener("click",function(e){
+  var t=e.target.closest(".tab"); if(!t)return; switchView(t.getAttribute("data-view"));
+});
 
 /* ============================================================
    RENDER — hero metrics
@@ -191,7 +303,6 @@ function metricCard(label,val,unit,has,meta){
    RENDER — today workouts + blocks
    ============================================================ */
 function flattenSteps(doc){
-  // Tolerant parser voor intervals.icu workout_doc -> [{dur, inten}]
   if(!doc) return [];
   var steps = doc.steps || doc;
   if(!Array.isArray(steps)) return [];
@@ -266,7 +377,6 @@ function renderToday(){
     } else if(w.description){
       c.appendChild(el("div","wk-desc", w.description.length>240?w.description.slice(0,240)+"…":w.description));
     }
-    // Adapt button only on first today-workout
     if(idx===0){
       c.appendChild(buildAdapt(list));
     }
@@ -275,7 +385,7 @@ function renderToday(){
 }
 function buildAdapt(list){
   var wrap=el("div","adapt-wrap");
-  var btn=el("button","btn btn-adapt","⚡ Adapt Training");
+  var btn=el("button","btn btn-adapt","Adapt Training");
   var panel=el("div","adapt-panel");
   var lbl=el("label",null,"Reden voor aanpassing · optioneel");
   var ta=document.createElement("textarea");
@@ -313,7 +423,7 @@ function sendAdapt(reason, list, btn){
 }
 
 /* ============================================================
-   RENDER — CTL chart (handgetekende SVG, geen libs)
+   RENDER — CTL chart
    ============================================================ */
 function renderChart(){
   var svg=document.getElementById("chart");
@@ -386,12 +496,184 @@ function renderUpcoming(){
 }
 
 /* ============================================================
+   AVAILABILITY
+   ============================================================ */
+function buildAvailModel(){
+  STATE.avail = {};
+  (STATE.data.availability||[]).forEach(function(r){ STATE.avail[r.date]={minutes:(r.minutes==null?null:Number(r.minutes)), needs_replan:!!r.needs_replan}; });
+  STATE.nearTerm = STATE.data.near_term_days!=null ? STATE.data.near_term_days : 9;
+  STATE.horizon  = STATE.data.availability_horizon_days!=null ? STATE.data.availability_horizon_days : 30;
+  var today = STATE.data.today;
+  STATE.availDates = [];
+  for(var i=0;i<=STATE.horizon;i++){ STATE.availDates.push(addDaysJS(today,i)); }
+  // replan pending = een near-term dag met needs_replan true (server-bron, overleeft reload)
+  STATE.replanPending = STATE.availDates.slice(0, STATE.nearTerm+1).some(function(d){ return STATE.avail[d] && STATE.avail[d].needs_replan; });
+}
+function getMin(date){ var a=STATE.avail[date]; return (a && a.minutes!=null) ? a.minutes : null; }
+function isNearTerm(date){ var i=STATE.availDates.indexOf(date); return i>=0 && i<=STATE.nearTerm; }
+
+function renderAvailability(){
+  var box=document.getElementById("av-list");
+  box.innerHTML="";
+  if(STATE.data.availability_error){
+    box.appendChild(el("div","empty-note","Kon beschikbaarheid niet laden. Probeer te verversen."));
+    return;
+  }
+  STATE.availDates.forEach(function(date,i){
+    var min=getMin(date);
+    var row=el("div","day"+(i===0?" today":"")+(isWeekend(date)?" weekend":""));
+    row.setAttribute("data-date",date);
+    var head=el("div","day-head");
+    var dl=el("div","day-date");
+    dl.textContent=dateLabel(date).toUpperCase();
+    if(i===0){ var b=el("span","day-badge","vandaag"); dl.appendChild(b); }
+    head.appendChild(dl);
+    var val=el("div","day-val"+(min==null?" empty":""), minLabel(min));
+    head.appendChild(val);
+    row.appendChild(head);
+
+    var s=document.createElement("input");
+    s.type="range"; s.className="day-slider"+(min==null?" empty":"");
+    s.min="-15"; s.max="300"; s.step="15";
+    s.value=String(min==null?-15:min);
+    s.setAttribute("aria-label","Beschikbaarheid "+dateLabel(date));
+    s.addEventListener("input",function(){ onSlide(date,row,s,val); });
+    s.addEventListener("change",function(){ onSlide(date,row,s,val); });
+    row.appendChild(s);
+
+    var sc=el("div","day-scale");
+    sc.appendChild(el("span",null,"leeg")); sc.appendChild(el("span",null,"0:00"));
+    sc.appendChild(el("span",null,"2:30")); sc.appendChild(el("span",null,"5:00"));
+    row.appendChild(sc);
+
+    box.appendChild(row);
+  });
+  renderConfirmBar();
+}
+
+function onSlide(date,row,s,val){
+  var raw=Number(s.value);
+  var min = raw<0 ? null : raw;
+  val.textContent=minLabel(min);
+  val.classList.toggle("empty", min==null);
+  s.classList.toggle("empty", min==null);
+  // update local model
+  if(!STATE.avail[date]) STATE.avail[date]={minutes:null,needs_replan:false};
+  STATE.avail[date].minutes=min;
+  if(isNearTerm(date)){ STATE.avail[date].needs_replan=true; STATE.replanPending=true; }
+  // queue save (debounced)
+  STATE.saveQueue[date]=min;
+  scheduleFlush();
+  renderConfirmBar();
+  updateAlert();
+}
+
+/* ---- auto-save (debounced) ---- */
+function setSync(state,txt){
+  var w=document.getElementById("av-sync");
+  w.className="sub av-sync"+(state?(" "+state):"");
+  document.getElementById("av-sync-txt").textContent=txt;
+}
+function scheduleFlush(){
+  setSync("saving","opslaan…");
+  clearTimeout(STATE.saveTimer);
+  STATE.saveTimer=setTimeout(flushSaves,700);
+}
+function flushSaves(){
+  var keys=Object.keys(STATE.saveQueue);
+  if(!keys.length || STATE.saving) return;
+  var snapshot=keys.map(function(d){ return {date:d, minutes:STATE.saveQueue[d]}; });
+  var sending={}; keys.forEach(function(k){ sending[k]=STATE.saveQueue[k]; });
+  STATE.saveQueue={};
+  STATE.saving=true;
+  fetch(API+"?save=1",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({changes:snapshot})})
+    .then(function(r){ return r.json().catch(function(){return {};}); })
+    .then(function(res){
+      STATE.saving=false;
+      if(res && res.ok){
+        setSync("saved","opgeslagen");
+        if(Object.keys(STATE.saveQueue).length) scheduleFlush();
+      } else {
+        requeue(sending); setSync("error","fout — opnieuw…"); setTimeout(scheduleFlush,1500);
+      }
+    })
+    .catch(function(){ STATE.saving=false; requeue(sending); setSync("error","offline — opnieuw…"); setTimeout(scheduleFlush,2500); });
+}
+function requeue(sending){ Object.keys(sending).forEach(function(d){ if(!(d in STATE.saveQueue)) STATE.saveQueue[d]=sending[d]; }); }
+
+/* ---- confirm / replan ---- */
+function renderConfirmBar(){
+  var bar=document.getElementById("av-confirm");
+  var n=STATE.availDates.slice(0,STATE.nearTerm+1).filter(function(d){ return STATE.avail[d] && STATE.avail[d].needs_replan; }).length;
+  var show=STATE.replanPending && n>0;
+  bar.classList.toggle("show",show);
+  if(show){
+    document.getElementById("av-confirm-ct").innerHTML="<b>"+n+"</b> dag"+(n>1?"en":"")+" gewijzigd in de komende "+(STATE.nearTerm+1)+" dagen";
+  }
+  // flag on tab
+  var tab=document.querySelector('.tab[data-view="availability"]');
+  if(tab) tab.classList.toggle("flag",show);
+}
+document.getElementById("av-confirm-btn").addEventListener("click",function(){
+  var btn=this;
+  var nearChanges=STATE.availDates.slice(0,STATE.nearTerm+1)
+    .filter(function(d){ return STATE.avail[d] && STATE.avail[d].needs_replan; })
+    .map(function(d){ return {date:d, minutes:STATE.avail[d].minutes}; });
+  if(!AVAIL_WEBHOOK){
+    toast("n8n-webhook nog niet ingesteld (zie AVAIL_WEBHOOK)");
+    return;
+  }
+  btn.disabled=true; btn.textContent="Bezig…";
+  var payload={ triggered_at:new Date().toISOString(), today:STATE.data.today, near_term_days:STATE.nearTerm+1, changes:nearChanges };
+  fetch(AVAIL_WEBHOOK,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)})
+    .then(function(r){
+      if(!r.ok) throw new Error("status "+r.status);
+      // clear needs_replan server-side
+      return fetch(API+"?confirm=1",{method:"POST",headers:{"Content-Type":"application/json"},body:"{}"});
+    })
+    .then(function(){
+      STATE.replanPending=false;
+      STATE.availDates.forEach(function(d){ if(STATE.avail[d]) STATE.avail[d].needs_replan=false; });
+      btn.disabled=false; btn.textContent="Confirm changes · adjust training";
+      renderConfirmBar();
+      toast("Verstuurd naar n8n · training wordt aangepast");
+    })
+    .catch(function(){ btn.disabled=false; btn.textContent="Confirm changes · adjust training"; toast("Fout bij versturen — probeer opnieuw"); });
+});
+
+/* ---- alert on cockpit (next 7 days unfilled) ---- */
+function updateAlert(){
+  var alert=document.getElementById("alert");
+  if(!STATE.availDates.length){ alert.classList.remove("show"); return; }
+  var next7=STATE.availDates.slice(0,7);
+  var missing=next7.filter(function(d){ return getMin(d)==null; });
+  if(missing.length){
+    alert.classList.add("show");
+    var lbls=missing.map(function(d){ return dateLabel(d); }).join(", ");
+    document.getElementById("alert-txt").innerHTML=
+      missing.length+" dag"+(missing.length>1?"en":"")+" in de komende 7 nog niet ingevuld: "+lbls+".";
+  } else {
+    alert.classList.remove("show");
+  }
+}
+document.getElementById("alert-cta").addEventListener("click",function(){
+  switchView("availability");
+  // scroll naar eerste niet-ingevulde dag
+  var next7=STATE.availDates.slice(0,7);
+  var first=next7.filter(function(d){ return getMin(d)==null; })[0];
+  if(first){ var node=document.querySelector('.day[data-date="'+first+'"]'); if(node) node.scrollIntoView({behavior:"smooth",block:"center"}); }
+});
+
+/* ============================================================
    BOOT
    ============================================================ */
-function renderAll(){ renderMetrics(); renderToday(); renderChart(); renderUpcoming();
+function renderAll(){
+  renderMetrics(); renderToday(); renderChart(); renderUpcoming();
+  buildAvailModel(); renderAvailability(); updateAlert();
+  setSync("","gesynct");
   var s=document.getElementById("sigil");
   var g=STATE.data.generated_at ? new Date(STATE.data.generated_at) : null;
-  s.textContent = "v2026.1 · training-cockpit · proj-2026-003" + (g?(" · sync "+g.toLocaleTimeString("nl-BE",{hour:"2-digit",minute:"2-digit"})):"");
+  s.textContent = "v2026.2 · training-cockpit · proj-2026-003" + (g?(" · sync "+g.toLocaleTimeString("nl-BE",{hour:"2-digit",minute:"2-digit"})):"");
 }
 document.getElementById("chips").addEventListener("click",function(e){
   var c=e.target.closest(".chip"); if(!c)return;
@@ -400,10 +682,11 @@ document.getElementById("chips").addEventListener("click",function(e){
   if(STATE.data) renderChart();
 });
 function load(){
-  fetch(API + "&t=" + Date.now(), {cache:"no-store"}).then(function(r){return r.json();}).then(function(d){
+  fetch(API + "?data=1&t=" + Date.now(), {cache:"no-store"}).then(function(r){return r.json();}).then(function(d){
     STATE.data=d||{}; renderAll();
   }).catch(function(){
     document.getElementById("today").innerHTML='<div class="empty-note">Fout bij laden van de data-API.</div>';
+    document.getElementById("av-list").innerHTML='<div class="empty-note">Fout bij laden van de data-API.</div>';
     toast("Kan data-API niet bereiken");
   });
 }

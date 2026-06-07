@@ -230,7 +230,7 @@ body{padding:22px 16px 64px;max-width:720px;margin:0 auto}
   </div>
 </div>
 
-<div class="sigil" id="sigil">v2026.2 · training-cockpit · proj-2026-003</div>
+<div class="sigil" id="sigil">v2026.3 · training-cockpit · proj-2026-003</div>
 <div id="toast"></div>
 
 <script>
@@ -708,7 +708,7 @@ function renderAll(){
   setSync("","gesynct");
   var s=document.getElementById("sigil");
   var g=STATE.data.generated_at ? new Date(STATE.data.generated_at) : null;
-  s.textContent = "v2026.2 · training-cockpit · proj-2026-003" + (g?(" · sync "+g.toLocaleTimeString("nl-BE",{hour:"2-digit",minute:"2-digit"})):"");
+  s.textContent = "v2026.3 · training-cockpit · proj-2026-003" + (g?(" · sync "+g.toLocaleTimeString("nl-BE",{hour:"2-digit",minute:"2-digit"})):"");
 }
 document.getElementById("chips").addEventListener("click",function(e){
   var c=e.target.closest(".chip"); if(!c)return;
